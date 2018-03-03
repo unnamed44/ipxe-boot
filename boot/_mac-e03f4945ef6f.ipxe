@@ -1,0 +1,9 @@
+#!ipxe
+
+kernel http://bugor.unnamed.info/rhel-server-7.4-x86_64-dvd/images/pxeboot/vmlinuz  inst.repo=http://bugor.unnamed.info/rhel-server-7.4-x86_64-dvd network inst.text inst.vnc inst.vncpassword=pass123 initrd=initrd.img
+initrd http://bugor.unnamed.info/rhel-server-7.4-x86_64-dvd/images/pxeboot/initrd.img
+
+# biosdevname=0 ksdevice= inst.repo=http://bugor.unnamed.info/rhel-server-7.4-x86_64-dvd load_ramdisk=1 noipv6 network inst.text inst.vnc inst.vncpassword=pass123
+#ipxe imgargs biosdevname=0 ksdevice= inst.repo=http://bugor.unnamed.info/rhel-server-7.4-x86_64-dvd load_ramdisk=1 noipv6 network inst.text inst.vnc inst.vncpassword=pass123
+
+boot

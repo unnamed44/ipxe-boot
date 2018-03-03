@@ -1,13 +1,10 @@
 #!ipxe
 
-# Variables are specified in boot.ipxe.cfg
-
-# Some menu defaults
 set menu-timeout 5000
 set submenu-timeout ${menu-timeout}
+
 isset ${menu-default} || set menu-default exit
 
-# Figure out if client is 64-bit capable
 cpuid --ext 29 && set arch x64 || set arch x86
 cpuid --ext 29 && set archl amd64 || set archl i386
 

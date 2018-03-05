@@ -14,6 +14,7 @@ cpuid --ext 29 && set archl amd64 || set archl i386
 menu iPXE boot menu for ${initiator-iqn}
 item --gap --              ------------------------- Operating systems ------------------------------
 item --key f debian        Install Debian from mirror.yandex.ru
+item --key w winpe        WinPE
 item --key l menu-live     Live environments...
 item --gap --              ------------------------- Tools and utilities ----------------------------
 item --key p pxelinux      Load PXELinux menu
@@ -68,6 +69,19 @@ kernel ${base-url}/linux
 initrd ${base-url}/initrd.gz
 boot || goto failed
 goto start
+
+
+:winpe
+echo Run winpe
+kernel wimboot
+initrd ${arch}/media/Boot/BCD                     
+initrd ${arch}/media/Boot/boot.sdi                
+initrd ${arch}/media/sources/boot.wim            
+boot || goto failed
+goto start
+
+
+
 
 
 :pxelinux

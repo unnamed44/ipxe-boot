@@ -73,10 +73,10 @@ goto start
 
 :winpe
 echo Run winpe
-kernel wimboot
-initrd ${arch}/media/Boot/BCD                     
-initrd ${arch}/media/Boot/boot.sdi                
-initrd ${arch}/media/sources/boot.wim            
+kernel http://10.0.6.1/ipxe-boot/wimboot
+initrd http://10.0.6.1/ipxe-boot/${arch}/media/Boot/BCD                     
+initrd http://10.0.6.1/ipxe-boot/${arch}/media/Boot/boot.sdi                
+initrd http://10.0.6.1/ipxe-boot/${arch}/media/sources/boot.wim            
 boot || goto failed
 goto start
 

@@ -73,15 +73,14 @@ goto start
 
 :winpe
 echo Run winpe
-set base-url http://10.0.6.1/ipxe-boot
-kernel ${base-url}/wimboot
-initrd ${base-url}/${arch}/media/bootmgr                     bootmgr
-initrd ${base-url}/${arch}/media/Boot/Fonts/segmono_boot.ttf segmono_boot.ttf
-initrd ${base-url}/${arch}/media/Boot/Fonts/segoe_slboot.ttf segoe_slboot.ttf
-initrd ${base-url}/${arch}/media/Boot/Fonts/wgl4_boot.ttf    wgl4_boot.ttf
-initrd ${base-url}/${arch}/media/Boot/BCD                     BCD
-initrd ${base-url}/${arch}/media/Boot/boot.sdi                boot.sdi
-initrd ${base-url}/${arch}/media/sources/boot.wim             boot.wim
+kernel http://10.0.6.1/ipxe-boot/wimboot
+initrd http://10.0.6.1/ipxe-boot/${arch}/media/bootmgr                     bootmgr
+initrd http://10.0.6.1/ipxe-boot/${arch}/media/Boot/Fonts/segmono_boot.ttf segmono_boot.ttf
+initrd http://10.0.6.1/ipxe-boot/${arch}/media/Boot/Fonts/segoe_slboot.ttf segoe_slboot.ttf
+initrd http://10.0.6.1/ipxe-boot/${arch}/media/Boot/Fonts/wgl4_boot.ttf    wgl4_boot.ttf
+initrd http://10.0.6.1/ipxe-boot/${arch}/media/Boot/BCD                     BCD
+initrd http://10.0.6.1/ipxe-boot/${arch}/media/Boot/boot.sdi                boot.sdi
+initrd http://10.0.6.1/ipxe-boot/${arch}/media/sources/boot.wim             boot.wim
 boot || goto failed
 goto start
 

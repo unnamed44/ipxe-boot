@@ -66,7 +66,7 @@ goto start
 echo Install Debian from mirror.yandex.ru
 set base-url http://mirror.yandex.ru/debian/dists/stable/main/installer-${archl}/current/images/netboot/debian-installer/${archl}
 kernel ${base-url}/linux
-initrd ${base-url}/initrd.gz
+initrd ${base-url}/initrd.gz ---
 boot || goto failed
 goto start
 

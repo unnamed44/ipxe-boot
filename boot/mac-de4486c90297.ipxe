@@ -1,0 +1,10 @@
+#!ipxe
+
+set protocol http
+set server_ip 10.0.6.1
+set iso http://mirror.yandex.ru/mirrors/alpine/v3.7/releases/x86_64/alpine-standard-3.7.0_rc3-x86_64.iso
+
+kernel ${protocol}://${server_ip}/memdisk || read void
+initrd ${iso} || read void
+imgargs memdisk iso raw || read void
+boot || read void

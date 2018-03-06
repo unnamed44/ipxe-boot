@@ -65,7 +65,8 @@ goto start
 :alpine-3.7
 set protocol http
 set server_ip 10.0.6.1
-set iso http://mirror.yandex.ru/mirrors/alpine/v3.7/releases/x86_64/alpine-standard-3.7.0_rc3-x86_64.iso
+#set iso http://mirror.yandex.ru/mirrors/alpine/v3.7/releases/x86_64/alpine-standard-3.7.0_rc3-x86_64.iso
+set iso http://mirror.yandex.ru/debian-cd/9.3.0/amd64/iso-cd/debian-9.3.0-amd64-netinst.iso
 kernel ${protocol}://${server_ip}/memdisk || read void
 initrd ${iso} || read void
 imgargs memdisk iso || read void

@@ -14,7 +14,7 @@ cpuid --ext 29 && set archl amd64 || set archl i386
 menu iPXE boot menu for ${initiator-iqn}
 item --gap --              ------------------------- Operating systems ------------------------------
 item --key f debian        Install Debian from mirror.yandex.ru
-item --key w winpe        WinPE
+item --key a alpine-3.7    Alpine 3.7
 item --key l menu-live     Live environments...
 item --gap --              ------------------------- Tools and utilities ----------------------------
 item --key p pxelinux      Load PXELinux menu
@@ -61,6 +61,16 @@ clear submenu-default
 goto start
 
 ############ MAIN MENU ITEMS ############
+
+:alpine-3.7
+set protocol http
+set server_ip 10.0.6.1
+set iso http://mirror.yandex.ru/mirrors/alpine/v3.7/releases/x86_64/alpine-standard-3.7.0_rc3-x86_64.iso
+kernel ${protocol}://${server_ip}/memdisk || read void
+initrd ${iso} || read void
+imgargs memdisk iso raw || read void
+boot || read void
+
 
 :debian
 echo Install Debian from mirror.yandex.ru

@@ -1,14 +1,202 @@
 #!ipxe
 
-chain --autofree boot.ipxe.cfg ||
+#set http-server https://raw.githubusercontent.com/unnamed44/ipxe-boot/master
+#set http-root /
+#set boot-url http://10.0.6.1/ipxe-boot/
+#set boot-url nfs://${nfs-server}${nfs-root}
+#set boot-url ${http-server}${http-root}
 
-#isset ${hostname} && chain --replace --autofree ${boot-dir}hostname-${hostname}.ipxe ||
-#isset ${uuid} && chain --replace --autofree ${boot-dir}uuid-${uuid}.ipxe ||
+chain --replace --autofree ${mac:hexraw}.ipxe ||
 
-chain --replace --autofree ${boot-dir}mac-${mac:hexraw}.ipxe ||
 
-#chain --replace --autofree ${boot-dir}pci-${pci/${busloc}.0.2}${pci/${busloc}.2.2}.ipxe ||
+set menu-timeout 5000
+set submenu-timeout ${menu-timeout}
+isset ${menu-default} || set menu-default exit
 
-#chain --replace --autofree ${boot-dir}chip-${chip}.ipxe ||
+console --picture pics/background.png
 
-chain --replace --autofree ${menu-url} ||
+
+cpuid --ext 29 && set arch x64 || set arch x86
+cpuid --ext 29 && set archl amd64 || set archl i386
+
+###################### MAIN MENU ####################################
+
+:start
+menu iPXE boot menu for ${initiator-iqn}
+item --gap --              --- Operating systems
+item menu-centos           CentOS
+item menu-debian           Debian
+item menu-rhel             Red Hat Enterprise Linux
+item menu-windows          Windows
+item menu-live             Live environments...
+item --gap --              --- Tools and utilities
+item pxelinux              Load PXELinux menu
+item menu-recovery         Recovery tools...
+item menu-diag             Diagnostics tools...
+item menu-install          Installers...
+item --gap --              --- Advanced options
+item config                Configure settings
+item shell                 Drop to iPXE shell
+item reboot                Reboot computer
+item
+item exit                  Exit iPXE and continue BIOS boot
+choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
+set menu-timeout 0
+goto ${selected}
+
+:cancel
+echo You cancelled the menu, dropping you to a shell
+
+:shell
+echo Type 'exit' to get the back to the menu
+shell
+set menu-timeout 0
+set submenu-timeout 0
+goto start
+
+:failed
+echo Booting failed, dropping to shell
+goto shell
+
+:reboot
+reboot
+
+:exit
+exit
+
+:config
+config
+goto start
+
+:back
+set submenu-timeout 0
+clear submenu-default
+goto start
+
+############ MAIN MENU ITEMS ############
+
+:menu-centos
+menu CentOS
+item --gap --              --- CentOS
+item centos                CentOS
+item
+item --key 0x08 back      Back to top menu...
+iseq ${menu-default} menu-install && isset ${submenu-default} && goto menu-install-timed ||
+choose selected && goto ${selected} || goto start
+:menu-install-timed
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected && goto ${selected} || goto start
+
+
+:menu-debian
+menu Debian
+item --gap --              --- Debian
+item debian                Debian
+item
+item --key 0x08 back      Back to top menu...
+iseq ${menu-default} menu-install && isset ${submenu-default} && goto menu-install-timed ||
+choose selected && goto ${selected} || goto start
+:menu-install-timed
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected && goto ${selected} || goto start
+
+
+:menu-rhel
+menu RHEL
+item --gap --              --- Red Hat Enterprise Linux
+item rhel-7.2              Red Hat Enterprise Linux 7.2
+item rhel-7.3              Red Hat Enterprise Linux 7.3
+item rhel-7.4              Red Hat Enterprise Linux 7.4
+item
+item --key 0x08 back      Back to top menu...
+iseq ${menu-default} menu-install && isset ${submenu-default} && goto menu-install-timed ||
+choose selected && goto ${selected} || goto start
+:menu-install-timed
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected && goto ${selected} || goto start
+
+
+:menu-windows
+menu Windows
+item --gap --              --- Windows
+item winpe                 WinPE
+item
+item --key 0x08 back      Back to top menu...
+iseq ${menu-default} menu-install && isset ${submenu-default} && goto menu-install-timed ||
+choose selected && goto ${selected} || goto start
+:menu-install-timed
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected && goto ${selected} || goto start
+
+
+:debian
+echo Install Debian from mirror.yandex.ru
+set base-url http://mirror.yandex.ru/debian/dists/stable/main/installer-${archl}/current/images/netboot/debian-installer/${archl}
+kernel ${base-url}/linux
+initrd ${base-url}/initrd.gz
+boot || goto failed
+goto start
+
+
+:winpe
+echo Run winpe
+kernel http://10.0.6.1/ipxe-boot/wimboot
+initrd http://10.0.6.1/ipxe-boot/${arch}/Media/bootmgr                     bootmgr
+initrd http://10.0.6.1/ipxe-boot/${arch}/Media/Boot/Fonts/segmono_boot.ttf segmono_boot.ttf
+initrd http://10.0.6.1/ipxe-boot/${arch}/Media/Boot/Fonts/segoe_slboot.ttf segoe_slboot.ttf
+initrd http://10.0.6.1/ipxe-boot/${arch}/Media/Boot/Fonts/wgl4_boot.ttf    wgl4_boot.ttf
+initrd http://10.0.6.1/ipxe-boot/${arch}/Media/Boot/BCD                     BCD
+initrd http://10.0.6.1/ipxe-boot/${arch}/Media/Boot/boot.sdi                boot.sdi
+initrd http://10.0.6.1/ipxe-boot/${arch}/en-us/winpe.wim             boot.wim
+boot || goto failed
+goto start
+
+
+
+
+
+:pxelinux
+set 210:string tftp://${next-server}/
+chain ${210:string}pxelinux.0 || goto failed
+goto start
+
+###################### RECOVERY MENU ################################
+
+:menu-recovery
+menu Recovery tools
+item
+item --key 0x08 back Back to top menu...
+iseq ${menu-default} menu-recovery && isset ${submenu-default} && goto menu-recovery-timed ||
+choose selected && goto ${selected} || goto start
+:menu-recovery-timed
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected && goto ${selected} || goto start
+
+###################### DIAGNOSTICS MENU #############################
+
+:menu-diag
+menu Diagnostic tools
+item
+item --key 0x08 back Back to top menu...
+iseq ${menu-default} menu-diag && isset ${submenu-default} && goto menu-diag-timed ||
+choose selected && goto ${selected} || goto start
+:menu-diag-timed
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected && goto ${selected} || goto start
+
+############################ INSTALLER MENU #########################
+
+:menu-install
+menu Installers for ${initiator-iqn}
+item
+item --key 0x08 back      Back to top menu...
+iseq ${menu-default} menu-install && isset ${submenu-default} && goto menu-install-timed ||
+choose selected && goto ${selected} || goto start
+:menu-install-timed
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected && goto ${selected} || goto start
+
+###################### LIVE ENVIRONMENT MENU ########################
+
+:menu-live
+menu Live environments for ${initiator-iqn}
+item
+item --key 0x08 back      Back to top menu...
+iseq ${menu-default} menu-live && isset ${submenu-default} && goto menu-live-timed ||
+choose selected && goto ${selected} || goto start
+:menu-live-timed
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected && goto ${selected} || goto start
+

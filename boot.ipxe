@@ -99,6 +99,7 @@ choose selected && goto ${selected} || goto start
 choose --timeout ${submenu-timeout} --default ${submenu-default} selected && goto ${selected} || goto start
 
 
+
 :menu-rhel
 menu RHEL
 item --gap --              --- Red Hat Enterprise Linux
@@ -132,6 +133,17 @@ kernel ${base-url}/linux
 initrd ${base-url}/initrd.gz
 boot || goto failed
 goto start
+
+
+:centos
+echo Install CentOS from mirror.yandex.ru
+#set base-url http://mirror.yandex.ru/debian/dists/stable/main/installer-${archl}/current/images/netboot/debian-installer/${archl}
+set base-url https://mirror.yandex.ru/centos/7/os/x86_64/images/pxeboot
+kernel ${base-url}/vmlinuz
+initrd ${base-url}/initrd.img
+boot || goto failed
+goto start
+
 
 
 :winpe

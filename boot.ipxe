@@ -26,6 +26,7 @@ menu iPXE boot menu for ${initiator-iqn}
 item --gap --              --- Operating systems
 item menu-centos           CentOS
 item menu-debian           Debian
+item menu-kali             Kali
 item menu-rhel             Red Hat Enterprise Linux
 item menu-windows          Windows
 item menu-live             Live environments...
@@ -98,7 +99,16 @@ choose selected && goto ${selected} || goto start
 :menu-install-timed
 choose --timeout ${submenu-timeout} --default ${submenu-default} selected && goto ${selected} || goto start
 
-
+:menu-kali
+menu Kali
+item --gap --              --- Debian
+item kali                Kali
+item
+item --key 0x08 back      Back to top menu...
+iseq ${menu-default} menu-install && isset ${submenu-default} && goto menu-install-timed ||
+choose selected && goto ${selected} || goto start
+:menu-install-timed
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected && goto ${selected} || goto start
 
 :menu-rhel
 menu RHEL
@@ -129,6 +139,14 @@ choose --timeout ${submenu-timeout} --default ${submenu-default} selected && got
 :debian
 echo Install Debian from mirror.yandex.ru
 set base-url http://mirror.yandex.ru/debian/dists/stable/main/installer-${archl}/current/images/netboot/debian-installer/${archl}
+kernel ${base-url}/linux
+initrd ${base-url}/initrd.gz
+boot || goto failed
+goto start
+
+:kali
+echo Install Kali
+set base-url http://http.kali.org/kali/dists/kali-rolling/main/installer-${archl}/current/images/netboot/debian-installer/${archl}
 kernel ${base-url}/linux
 initrd ${base-url}/initrd.gz
 boot || goto failed

@@ -6,7 +6,7 @@
 #set boot-url nfs://${nfs-server}${nfs-root}
 #set boot-url ${http-server}${http-root}
 
-chain --replace --autofree ${mac:hexraw}.ipxe ||
+chain --replace --autofree https://raw.githubusercontent.com/unnamed44/ipxe-boot/master/boot/${mac:hexraw}.ipxe ||
 
 
 set menu-timeout 5000

@@ -157,7 +157,7 @@ goto start
 echo Install CentOS from mirror.yandex.ru
 set base-url https://mirror.yandex.ru/centos/7/os/x86_64/images/pxeboot
 kernel ${base-url}/vmlinuz initrd=initrd.img inst.text ip=dhcp ipv6.disable inst.repo=http://mirror.yandex.ru/centos/7/os/x86_64
-append ${base-url}/initrd.img
+initrd ${base-url}/initrd.img
 boot || goto failed
 goto start
 

@@ -159,7 +159,7 @@ echo Install CentOS from mirror.yandex.ru
 #kernel ${base-url}/vmlinuz initrd=initrd.img inst.text ip=dhcp ipv6.disable inst.repo=http://mirror.yandex.ru/centos/7/os/x86_64
 #initrd ${base-url}/initrd.img
 set base http://mirror.centos.org/centos/7/os/x86_64
-prompt -k 0x197e -t 2000 Press F12 to install CentOS... || exit
+#prompt -k 0x197e -t 2000 Press F12 to install CentOS... || exit
 kernel ${base}/images/pxeboot/vmlinuz initrd=initrd.img repo=${base}
 initrd ${base}/images/pxeboot/initrd.img
 boot

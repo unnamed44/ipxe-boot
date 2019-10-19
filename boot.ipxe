@@ -155,7 +155,6 @@ goto start
 
 :centos
 echo Install CentOS from mirror.yandex.ru
-#set base-url http://mirror.yandex.ru/debian/dists/stable/main/installer-${archl}/current/images/netboot/debian-installer/${archl}
 set base-url https://mirror.yandex.ru/centos/7/os/x86_64/images/pxeboot
 kernel ${base-url}/vmlinuz initrd=initrd.img inst.text ip=dhcp ipv6.disable inst.repo=http://mirror.yandex.ru/centos/7/os/x86_64
 append ${base-url}/initrd.img

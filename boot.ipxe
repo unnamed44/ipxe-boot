@@ -80,6 +80,7 @@ goto start
 menu CentOS
 item --gap --              --- CentOS
 item centos                CentOS
+item centos-text                CentOS Text mode
 item
 item --key 0x08 back      Back to top menu...
 iseq ${menu-default} menu-install && isset ${submenu-default} && goto menu-install-timed ||

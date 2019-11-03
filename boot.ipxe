@@ -13,7 +13,7 @@ set menu-timeout 5000
 set submenu-timeout ${menu-timeout}
 isset ${menu-default} || set menu-default exit
 
-console --picture pics/background.png
+#console --picture pics/background.png
 
 
 cpuid --ext 29 && set arch x64 || set arch x86

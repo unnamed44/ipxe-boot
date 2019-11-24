@@ -80,6 +80,7 @@ goto start
 menu CentOS
 item --gap --              --- CentOS
 item centos                CentOS
+item centos8                CentOS
 item centos-text                CentOS Text mode
 item
 item --key 0x08 back      Back to top menu...
@@ -166,6 +167,14 @@ initrd ${base}/images/pxeboot/initrd.img
 boot
 #boot || goto failed
 #goto start
+
+:centos8
+echo Install CentOS 8 from mirror.yandex.ru
+set base http://mirror.docker.ru/centos/8/BaseOS/x86_64/kickstart
+kernel ${base}/images/pxeboot/vmlinuz initrd=initrd.img repo=${base}
+initrd ${base}/images/pxeboot/initrd.img
+boot
+
 
 :centos-text
 echo Install CentOS from mirror.yandex.ru
